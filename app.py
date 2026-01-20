@@ -62,11 +62,18 @@ st.markdown("""
     """, unsafe_allow_html=True)
 
 # 3. دالة تحميل النموذج
+# ابحثي عن هذه الدالة في ملف app.py وعدليها
 @st.cache_resource
 def load_assets():
     try:
-        model = joblib.load('weather_model.pkl')
-        features = joblib.load('features_list.pkl')
+        # أضفنا os.path لضمان العثور على الملف في أي سيرفر
+        import os
+        base_path = os.path.dirname(__file__)
+        model_path = os.path.join(base_path, 'weather_model.pkl')
+        features_path = os.path.join(base_path, 'features_list.pkl')
+        
+        model = joblib.load(model_path)
+        features = joblib.load(features_path)
         return model, features
     except Exception as e:
         st.error(f"فشل تحميل النموذج: {e}")
@@ -134,5 +141,6 @@ if model is not None:
 
 else:
     st.warning("⚠️ الملفات المطلوبة غير موجودة.")
+
 
 st.markdown("<br><hr><center>تم تطوير التطبيق لمشروع PR1 - مشروع التنبؤ بالطقس F24</center>", unsafe_allow_html=True)
